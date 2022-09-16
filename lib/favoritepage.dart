@@ -37,15 +37,5 @@ class _FavoritePageState extends State<FavoritePage> {
     );
   }
 
-  void addFavorite(WordPair word) {
-    setState(() {
-      if (!widget.saved.contains(word)) {
-        widget.saved.add(word);
-      } else {
-        widget.saved.remove(word);
-      }
-    });
 
-    print(widget.saved.length);
-  }
 }
