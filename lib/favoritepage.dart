@@ -1,41 +1,37 @@
 import 'package:english_words/english_words.dart';
+import 'package:first_project/FavProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class FavoritePage extends StatefulWidget {
-  const FavoritePage({Key? key, required this.saved, required Function this.callback}) : super(key: key);
-  final List<WordPair> saved;
-  final Function callback;
-
-  @override
-  State<FavoritePage> createState() => _FavoritePageState();
-}
-
-class _FavoritePageState extends State<FavoritePage> {
-  TextStyle _biggerFont = const TextStyle(fontSize: 18);
+class FavoritePage extends StatelessWidget {
+  const FavoritePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Favorite Page"),
-        leading: IconButton(
-            onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
+        title: Text("My Favorite Page"),
       ),
-      body: ListView.builder(
-        itemCount: widget.saved.length,
-        itemBuilder: (context, index) {
-          WordPair word = widget.saved[index];
-          return ListTile(
-              title: Text(word.asPascalCase, style: _biggerFont),
-              trailing: IconButton(
-                  onPressed: () {
-                    widget.callback(word: word);
-                  },
-                  icon: const Icon(Icons.favorite, color: Colors.red)));
-        },
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Consumer<FavProvider>(
+          builder: (context, fav, child) {
+            return ListView.builder(
+              itemCount: fav.getWords.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(fav.getWords[index].asString),
+                  leading: IconButton(
+                    icon: Icon(Icons.favorite,color: Colors.red),
+                    onPressed: () => fav.addWord(fav.getWords[index]),
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
-
-
 }
